@@ -139,7 +139,7 @@ body {
 .hero button {
   padding: 0.7rem 1.5rem;
   border: none;
-  background: var(--hero-btn);
+  background: var(--secondary-color);
   color: var(--hero-btn-text);
   font-size: 1rem;
   cursor: pointer;
@@ -182,9 +182,33 @@ body {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
 }
 
+.hero-text button {
+  background: var(--text-color);   /* your theme color */
+  color: white;                       /* default text color */
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-text button:hover {
+  background: var(--secondary-color);   /* background flips */
+  color: var(--text-color);        
+}
+
+.hero-text button:active {
+  transform: scale(0.97);  
+  background: #f0f0f0;     
+  color: black;
+}
+
+
 .hero-text h1 {
   font-family: var(--font-heading);
-  font-weight: 700; /* makes it bold */
+  font-weight: 700;
   line-height: 1.2;
 }
 
