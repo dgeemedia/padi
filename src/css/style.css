@@ -25,12 +25,24 @@
   --hero-btn-text: var(--white);
   --button-bg: var(--text-color);
   --button-hover: var(--info);
+  --font-body: Arial, Helvetica, sans-serif;
+  --font-headline: Haettenschweiler, "Arial Narrow Bold", sans-serif;
+
+  /* sizes */
+  --font-base: 18px;
+  --small-font: 0.8em;
+  --large-font: 1.2em;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
   
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-base);
   background: var(--background-color);
   color: var(--text-color);
 }
@@ -60,12 +72,25 @@ body {
 }
 
 /* Logo */
+.logo {
+  line-height: 60px;
+  width: 245px;
+  overflow: hidden;
+  display: flex;
+  font-size: 30px;
+  text-align: right;
+  font-family: var(--font-headline);
+}
+
 .logo img {
   height: auto;
-  width: 120px;
-  max-height: 50px;
-  display: block;
+  width: 60px;
   cursor: pointer;
+}
+
+.logo a {
+  text-decoration: none;
+  color: var(--font-body);
 }
 
 /* Nav links */
