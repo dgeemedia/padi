@@ -1,0 +1,26 @@
+{
+  "name": "mypadiman",
+  "version": "1.0.0",
+  "description": "MyPadiMan platform frontend (Vanilla JS + ES Modules + Vite)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  },
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgeemedia/padi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/dgeemedia/padi/issues"
+  },
+  "homepage": "https://github.com/dgeemedia/padi#readme"
+}
