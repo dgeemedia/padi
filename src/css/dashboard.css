@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  background: #f4f6f9;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: var(--primary-color, #4CAF50);
+  color: white;
+  padding: 20px;
+  height: 100vh;
+}
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar ul li {
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.sidebar ul li.active,
+.sidebar ul li:hover {
+  background: var(--primary-dark, #388E3C);
+}
+
+/* Dashboard */
+.dashboard {
+  flex: 1;
+  padding: 30px;
+}
+header h1 {
+  margin-bottom: 10px;
+}
+.profile-form {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.form-section {
+  margin-bottom: 20px;
+}
+.form-section h2 {
+  margin-bottom: 10px;
+  color: var(--primary-color, #4CAF50);
+}
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.btn-save {
+  background: var(--primary-color, #4CAF50);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-save:hover {
+  background: var(--primary-dark, #388E3C);
+}

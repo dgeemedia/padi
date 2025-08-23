@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyPadiMan Dashboard | Profile Setup</title>
+  <link rel="stylesheet" href="../src/css/dashboard.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>MyPadiMan</h2>
+    <ul>
+      <li class="active">Profile Setup</li>
+      <li>Tasks</li>
+      <li>Wallet</li>
+      <li>Orders</li>
+      <li>Settings</li>
+    </ul>
+  </aside>
+
+  <!-- Main Dashboard Content -->
+  <main class="dashboard">
+    <header>
+      <h1>Complete Your Profile</h1>
+      <p>Please update your profile to use MyPadiMan effectively.</p>
+    </header>
+
+    <form class="profile-form">
+      <!-- Role Selection -->
+      <section class="form-section">
+        <h2>Choose Your Role</h2>
+        <label><input type="checkbox" name="role" value="runner"> Runner</label>
+        <label><input type="checkbox" name="role" value="artisan"> Artisan</label>
+        <label><input type="checkbox" name="role" value="business"> Business Owner</label>
+      </section>
+
+      <!-- Location -->
+      <section class="form-section">
+        <h2>Update Location</h2>
+        <label for="country">Country</label>
+        <input type="text" id="country" name="country" placeholder="Enter your country" required>
+
+        <label for="state">State</label>
+        <input type="text" id="state" name="state" placeholder="Enter your state" required>
+
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" placeholder="Enter your city" required>
+
+        <label for="address">Address</label>
+        <textarea id="address" name="address" placeholder="Enter your address" required></textarea>
+      </section>
+
+      <!-- Save Button -->
+      <button type="submit" class="btn-save">Save & Continue</button>
+    </form>
+  </main>
+</body>
+</html>
