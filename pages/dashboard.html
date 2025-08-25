@@ -1,59 +1,113 @@
+<!--dashboard-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyPadiMan Dashboard | Profile Setup</title>
+  <title>MyPadiMan Dashboard</title>
   <link rel="stylesheet" href="../src/css/dashboard.css">
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2>MyPadiMan</h2>
-    <ul>
-      <li class="active">Profile Setup</li>
-      <li>Tasks</li>
-      <li>Wallet</li>
-      <li>Orders</li>
-      <li>Settings</li>
-    </ul>
-  </aside>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="brand">
+    <div class="avatar-badge" id="sidebarAvatar"></div>
+    <span>MyPadiMan</span>
+  </div>
+  <ul>
+    <li class="active">Profile Setup</li>
+    <li>Tasks</li>
+    <li>Wallet</li>
+    <li>Orders</li>
+    <li>Settings</li>
+    <li>Logout</li>
+  </ul>
+</aside>
 
-  <!-- Main Dashboard Content -->
+  <!-- Main Content -->
   <main class="dashboard">
-    <header>
-      <h1>Complete Your Profile</h1>
-      <p>Please update your profile to use MyPadiMan effectively.</p>
+    <!-- Header -->
+    <header class="dashboard-header">
+      <h1>Welcome to MyPadiMan</h1>
+      <p>Update your profile and start posting or accepting errands.</p>
     </header>
 
+    <!-- Profile Setup Form -->
     <form class="profile-form">
-      <!-- Role Selection -->
+      <section class="form-section">
+        <h2>Profile Picture (Optional)</h2>
+        <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" />
+        <div id="profilePhotoPreview" class="photo-preview"></div>
+      </section>
+
       <section class="form-section">
         <h2>Choose Your Role</h2>
         <label><input type="checkbox" name="role" value="runner"> Runner</label>
         <label><input type="checkbox" name="role" value="artisan"> Artisan</label>
         <label><input type="checkbox" name="role" value="business"> Business Owner</label>
+
+        <!-- Dynamic fields (artisan skills / business info with photo) get injected here -->
+        <div id="role-specific-fields"></div>
       </section>
 
-      <!-- Location -->
+      <section class="form-section">
+        <h2>Phone Number</h2>
+        <input type="tel" name="phone" placeholder="+234 800 000 0000" required />
+      </section>
+
       <section class="form-section">
         <h2>Update Location</h2>
         <label for="country">Country</label>
-        <input type="text" id="country" name="country" placeholder="Enter your country" required>
+        <select id="country" name="country" required>
+          <option value="">-- Select Country --</option>
+          <option value="Nigeria">Nigeria</option>
+        </select>
 
         <label for="state">State</label>
-        <input type="text" id="state" name="state" placeholder="Enter your state" required>
+        <select id="state" name="state" required>
+          <option value="">-- Select State --</option>
+        </select>
 
-        <label for="city">City</label>
-        <input type="text" id="city" name="city" placeholder="Enter your city" required>
+        <label for="lga">Local Government</label>
+        <select id="lga" name="lga" required>
+          <option value="">-- Select LGA --</option>
+        </select>
 
         <label for="address">Address</label>
-        <textarea id="address" name="address" placeholder="Enter your address" required></textarea>
+        <textarea id="address" name="address" placeholder="Enter your exact address" required></textarea>
       </section>
 
-      <!-- Save Button -->
       <button type="submit" class="btn-save">Save & Continue</button>
     </form>
+
+    <!-- Post Task -->
+    <section class="form-section task-section">
+      <h2>Post a New Task / Errand</h2>
+      <input type="text" id="task-title" placeholder="Task title" required />
+      <textarea id="task-desc" placeholder="Describe your task" required></textarea>
+      <!-- Distance will be auto-calculated later via JS -->
+      <button type="button" id="btnPostTask" class="btn-save">Post Task</button>
+    </section>
+
+    <!-- Available Tasks -->
+    <section class="form-section">
+      <h2>Available Tasks Near You</h2>
+      <div id="tasks-list" class="tasks-list"></div>
+    </section>
+    
   </main>
+
+  <!-- AI Assistant Widget -->
+  <div id="ai-chat-widget">
+    <div id="ai-chat-header">🤖 MyPadiMan AI Assistant</div>
+    <div id="chat-messages"></div>
+    <div id="chat-input">
+      <input type="text" id="userInput" placeholder="Ask me anything...">
+      <button id="btnSendPrompt">Send</button>
+    </div>
+  </div>
+
+  <!-- ES Module Entry -->
+  <script type="module" src="../src/js/dashboardmain.js"></script>
 </body>
 </html>
