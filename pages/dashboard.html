@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MyPadiMan Dashboard</title>
   <link rel="stylesheet" href="../src/css/dashboard.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 </head>
 <body>
 <!-- Sidebar -->
@@ -88,6 +91,8 @@
       <!-- Distance will be auto-calculated later via JS -->
       <button type="button" id="btnPostTask" class="btn-save">Post Task</button>
     </section>
+
+    <div id="map" style="height:320px"></div>
 
     <!-- Available Tasks -->
     <section class="form-section">
