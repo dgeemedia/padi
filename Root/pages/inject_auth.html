@@ -1,0 +1,32 @@
+﻿<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><title>Inject MyPadiMan Auth (dev)</title></head>
+<body>
+<script>
+  // --- Replace these values with the ones you received from your mock server login ---
+  const token = "b390dd201fe9de6b9739e71c"; 
+  const user = {
+    "id": "4d7d568fd40338ce",
+    "name": "Test User",
+    "email": "test@example.com",
+    "phone": null,
+    "emailVerified": true,
+    "provider": null
+  };
+
+  // Write to localStorage exactly as client code expects
+  try {
+    localStorage.setItem('mypadiman_token', token);
+    localStorage.setItem('mypadiman_user', JSON.stringify(user));
+    console.log('MyPadiMan auth injected:', token, user);
+  } catch (e) {
+    console.error('Failed to write to localStorage', e);
+    alert('Failed to set localStorage — see console for details.');
+  }
+
+  // Redirect to dashboard (adjust path if your dashboard location differs)
+  // If this file sits in Root/pages/ and dashboard.html is in the same folder, use 'dashboard.html'
+  location.href = 'dashboard.html';
+</script>
+</body>
+</html>

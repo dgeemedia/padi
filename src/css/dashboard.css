@@ -159,6 +159,36 @@ textarea {
   background: var(--primary-dark);
 }
 
+/* Verification banner */
+.banner {
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.banner.ok {
+  background: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  color: #256029;
+}
+.banner.warn {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  color: #856404;
+}
+.banner button {
+  margin-left: 8px;
+  padding: 4px 8px;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.banner button:hover {
+  background: #0056b3;
+}
+
 /* Tasks List */
 .tasks-list .task-card {
   background: var(--primary-light);

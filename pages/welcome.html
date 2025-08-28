@@ -1,0 +1,199 @@
+<!-- welcome.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Welcome — MyPadiMan</title>
+  <link rel="stylesheet" href="../src/css/style.css" />
+  <style>
+    /* small inline CSS to guarantee minimal layout if style.css isn't loaded */
+    .suggest-wrap { max-width:900px; margin:36px auto; padding:20px; background:#fff; border-radius:12px; box-shadow:0 6px 24px rgba(0,0,0,.06); }
+    .hero { display:flex; gap:20px; align-items:center; }
+    .avatar { width:76px; height:76px; border-radius:50%; background:#eee; display:flex; align-items:center; justify-content:center; font-size:32px; }
+    .steps { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:18px; }
+    .step { padding:12px; border-radius:10px; background:#fafafa; border:1px solid #eee; }
+    .btn { display:inline-block; padding:10px 14px; border-radius:8px; cursor:pointer; text-decoration:none; color:#fff; background:#4caf50; border:none; }
+    .btn-ghost { background:transparent; color:#333; border:1px solid #ddd; }
+    .notice { margin-top:18px; padding:12px; background:#fff3cd; border:1px solid #ffeeba; border-radius:8px; color:#856404; }
+    .muted { color:#666; font-size:.95rem; }
+    .actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+    .small { font-size:.9rem; color:#555; }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="suggest-wrap" id="suggest-root">
+    <div id="content">Loading…</div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <!-- default config fallback -->
+  <script>
+    window.MYPADIMAN_CONFIG = window.MYPADIMAN_CONFIG || { serverMode: true, baseUrl: "http://localhost:4000" };
+  </script>
+
+  <script type="module">
+    // The welcome page expects auth.mjs/api.mjs to exist and follow the same API:
+    import { getCurrentUser } from '../src/js/auth.mjs';
+    import { apiFetch, clearToken, clearUser } from '../src/js/api.mjs';
+
+    const root = document.getElementById('content');
+    const conf = window.MYPADIMAN_CONFIG || { serverMode: false };
+
+    // Heuristic for whether a user is considered "verified" by backend/user object.
+    function isVerified(user) {
+      if (!user) return false;
+      const flags = ['emailVerified','emailConfirmed','verified','isVerified'];
+      for (const f of flags) if (user[f]) return true;
+      // Social login presence can be considered verified
+      if (user.authProvider || user.provider || user.socialId || user.oauth) return true;
+      return false;
+    }
+
+    function renderNotSignedIn() {
+      root.innerHTML = `
+        <h2>Not signed in</h2>
+        <p class="muted">You must be signed in (and verified) before we can continue with onboarding.</p>
+        <div class="actions">
+          <a class="btn-ghost" href="login.html">Go to Login</a>
+          <a class="btn-ghost" href="register.html">Register</a>
+        </div>
+      `;
+    }
+
+    function renderVerificationNeeded(user) {
+      root.innerHTML = '';
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = `
+        <div class="hero">
+          <div class="avatar">${(user.name && user.name[0]) ? user.name[0].toUpperCase() : '🙂'}</div>
+          <div>
+            <h2>Almost there, ${user.name || 'friend'}!</h2>
+            <p class="muted">We need to confirm your email or social login before fully onboarding you.</p>
+            <div class="small">Email: <strong>${user.email || '—'}</strong></div>
+          </div>
+        </div>
+
+        <div class="notice">
+          <strong>Please confirm your email</strong>
+          <div class="small">We sent a confirmation link to your email. Click it to verify your account, then return to this page.</div>
+        </div>
+
+        <div class="actions" style="margin-top:10px;">
+          <button id="btnResend" class="btn">Resend confirmation</button>
+          <a class="btn-ghost" href="login.html">Back to Login</a>
+          <button id="btnSignout" class="btn-ghost">Sign out</button>
+        </div>
+
+        <div id="resendStatus" class="small" style="margin-top:10px;"></div>
+      `;
+      root.appendChild(wrapper);
+
+      const btnResend = document.getElementById('btnResend');
+      const btnSignout = document.getElementById('btnSignout');
+      const status = document.getElementById('resendStatus');
+
+      // Resend confirmation (only available in server mode)
+      btnResend.addEventListener('click', async () => {
+        status.textContent = 'Sending...';
+        if (!conf.serverMode) {
+          status.textContent = 'Resend not available in local/dev mode.';
+          return;
+        }
+        try {
+          const resp = await apiFetch('/auth/resend-confirm', { method: 'POST', body: JSON.stringify({ email: getCurrentUser()?.email }) });
+          status.textContent = resp?.message || 'Confirmation sent. Check your inbox.';
+        } catch (err) {
+          console.error('resend-confirm error', err);
+          status.textContent = err?.message || 'Could not resend confirmation.';
+        }
+      });
+
+      btnSignout.addEventListener('click', () => {
+        clearToken();
+        clearUser();
+        window.location.href = 'login.html';
+      });
+    }
+
+    function renderWelcome(user) {
+      root.innerHTML = '';
+      const welcome = document.createElement('div');
+      welcome.innerHTML = `
+        <div class="hero">
+          <div class="avatar">${(user.name && user.name[0]) ? user.name[0].toUpperCase() : '👋'}</div>
+          <div>
+            <h2>Welcome, ${user.name || 'New Padi'}!</h2>
+            <p class="muted">Great to have you on MyPadiMan. Here are some suggested next steps.</p>
+          </div>
+        </div>
+
+        <div class="steps" aria-live="polite">
+          <div class="step">
+            <h3>1. Profile setup</h3>
+            <p class="small">Add phone, address, roles, and a photo so runners trust you.</p>
+            <div class="actions"><a id="linkProfile" class="btn">Complete profile</a></div>
+          </div>
+
+          <div class="step">
+            <h3>2. Post your first task</h3>
+            <p class="small">Create your first errand and set an escrow to attract runners quickly.</p>
+            <div class="actions"><a id="linkPost" class="btn">Post a task</a></div>
+          </div>
+
+          <div class="step">
+            <h3>3. Get funded (Wallet)</h3>
+            <p class="small">Deposit into your wallet so you can secure escrow for tasks.</p>
+            <div class="actions"><a id="linkWallet" class="btn">Open Wallet</a></div>
+          </div>
+        </div>
+
+        <div style="margin-top:18px;display:flex;gap:8px;">
+          <a id="btnDashboard" class="btn">Go to Dashboard</a>
+          <button id="btnSignout2" class="btn-ghost">Sign out</button>
+        </div>
+      `;
+      root.appendChild(welcome);
+
+      document.getElementById('linkProfile').addEventListener('click', () => window.location.href = 'dashboard.html#profile');
+      document.getElementById('linkPost').addEventListener('click', () => window.location.href = 'dashboard.html?open=post');
+      document.getElementById('linkWallet').addEventListener('click', () => window.location.href = 'dashboard.html#wallet');
+      document.getElementById('btnDashboard').addEventListener('click', () => window.location.href = 'dashboard.html');
+      document.getElementById('btnSignout2').addEventListener('click', () => {
+        clearToken();
+        clearUser();
+        window.location.href = 'login.html';
+      });
+    }
+
+    (function init() {
+      try {
+        const user = getCurrentUser();
+        if (!user) {
+          renderNotSignedIn();
+          return;
+        }
+        // serverMode: show verification gate when unverified
+        if (conf.serverMode) {
+          if (isVerified(user)) renderWelcome(user);
+          else renderVerificationNeeded(user);
+        } else {
+          // local/dev mode: show welcome (treat as verified) but inform developer
+          renderWelcome(user);
+          const note = document.createElement('div');
+          note.className = 'small muted';
+          note.style.marginTop = '12px';
+          note.textContent = 'Note: in production the backend will require email confirmation or social auth for full activation.';
+          root.appendChild(note);
+        }
+      } catch (err) {
+        console.error('welcome init error', err);
+        root.innerHTML = '<p class="danger">Could not load onboarding. Try again later.</p>';
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Inject Auth</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; padding: 28px; background:#f7f7f8; }
+    .card { background:#fff; padding:18px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,.06); max-width:720px; margin:auto; }
+    input, textarea { width:100%; padding:8px; margin-top:6px; margin-bottom:12px; border-radius:6px; border:1px solid #ddd; box-sizing:border-box; }
+    button { padding:10px 14px; border-radius:8px; background:#1976d2; color:#fff; border:none; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Inject Auth (dev)</h2>
+    <p>Quickly set localStorage keys used by the app for token + user so you can jump straight to the dashboard.</p>
+
+    <label>Token (paste the token returned by mock-server)</label>
+    <input id="inputToken" placeholder="paste token here"/>
+
+    <label>User JSON (single line) — example: {"id":"...","name":"Test User","email":"test@example.com","emailVerified":true}</label>
+    <textarea id="inputUser" rows="4"></textarea>
+
+    <div style="display:flex;gap:8px;">
+      <button id="btnInject">Inject + Go to Dashboard</button>
+      <button id="btnClear" style="background:#9e9e9e;">Clear</button>
+    </div>
+
+    <p style="margin-top:12px;font-size:.9rem;color:#666;">
+      Note: this file writes to <code>localStorage</code> keys <code>mypadiman_token</code> and <code>mypadiman_user</code>.
+      Use only for local QA.
+    </p>
+  </div>
+
+<script>
+  document.getElementById('btnInject').addEventListener('click', () => {
+    const token = (document.getElementById('inputToken').value || '').trim();
+    let userRaw = (document.getElementById('inputUser').value || '').trim();
+
+    if (!token) return alert('Please paste a token.');
+    if (!userRaw) {
+      // minimal fallback
+      userRaw = JSON.stringify({ id: 'local_dev', name: 'Local Dev', email: 'local@dev', emailVerified: true });
+    }
+
+    try {
+      const user = typeof userRaw === 'string' ? JSON.parse(userRaw) : userRaw;
+      localStorage.setItem('mypadiman_token', token);
+      localStorage.setItem('mypadiman_user', JSON.stringify(user));
+      alert('Injected token & user. Redirecting to dashboard...');
+      // path relative to pages/ folder
+      window.location.href = 'dashboard.html';
+    } catch (err) {
+      alert('Invalid user JSON: ' + err.message);
+    }
+  });
+
+  document.getElementById('btnClear').addEventListener('click', () => {
+    localStorage.removeItem('mypadiman_token');
+    localStorage.removeItem('mypadiman_user');
+    alert('Cleared local auth keys.');
+  });
+
+  // prefill with a friendly example for convenience
+  document.getElementById('inputUser').value = JSON.stringify({
+    id: "local_dev_user",
+    name: "Local Dev",
+    email: "local@dev",
+    emailVerified: true
+  });
+</script>
+</body>
+</html>

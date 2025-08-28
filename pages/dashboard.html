@@ -8,15 +8,19 @@
   <link rel="stylesheet" href="../src/css/dashboard.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 </head>
 <body>
 <!-- Sidebar -->
 <aside class="sidebar">
   <div class="brand">
-    <div class="avatar-badge" id="sidebarAvatar"></div>
+    <div class="avatar-badge" id="sidebarAvatar">👤</div>
     <span>MyPadiMan</span>
+
+    <!-- Auth controls (dashboard hosts Logout only) -->
+    <button id="btnLogout" class="btn-save" style="margin-top:12px; display:none; background:#f44336;">Logout</button>
+    <span id="profileNameDisplay" style="display:block;margin-top:8px;color:#fff"></span>
   </div>
+
   <ul>
     <li class="active">Profile Setup</li>
     <li>Tasks</li>
@@ -33,6 +37,14 @@
     <header class="dashboard-header">
       <h1>Welcome to MyPadiMan</h1>
       <p>Update your profile and start posting or accepting errands.</p>
+
+      <!-- Verification banner (QA) -->
+      <div id="verificationBanner" class="verify-banner" style="margin-top:12px;"></div>
+      <!-- helper to show verify link returned from server (hidden until used) -->
+      <div id="verifyLinkContainer" style="display:none;margin-top:8px;">
+        <small>Verification link (mock): <a id="verifyLink" href="#" target="_blank" rel="noopener noreferrer"></a></small>
+        <button id="copyVerifyLink" class="btn-save" style="margin-left:8px">Copy</button>
+      </div>
     </header>
 
     <!-- Profile Setup Form -->
@@ -49,7 +61,6 @@
         <label><input type="checkbox" name="role" value="artisan"> Artisan</label>
         <label><input type="checkbox" name="role" value="business"> Business Owner</label>
 
-        <!-- Dynamic fields (artisan skills / business info with photo) get injected here -->
         <div id="role-specific-fields"></div>
       </section>
 
@@ -88,7 +99,6 @@
       <h2>Post a New Task / Errand</h2>
       <input type="text" id="task-title" placeholder="Task title" required />
       <textarea id="task-desc" placeholder="Describe your task" required></textarea>
-      <!-- Distance will be auto-calculated later via JS -->
       <button type="button" id="btnPostTask" class="btn-save">Post Task</button>
     </section>
 
@@ -111,6 +121,14 @@
       <button id="btnSendPrompt">Send</button>
     </div>
   </div>
+
+  <!-- Runtime Config (shared) -->
+  <script>
+    window.MYPADIMAN_CONFIG = {
+      serverMode: true,                     // flip to true to use backend
+      baseUrl: "http://localhost:4000" // set your API root
+    };
+  </script>
 
   <!-- ES Module Entry -->
   <script type="module" src="../src/js/dashboardmain.js"></script>
